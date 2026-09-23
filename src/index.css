@@ -1,0 +1,265 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Quiet, warm near-black. Everything else is restraint. */
+  --background: #0c0c0f;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-hover: rgba(255, 255, 255, 0.09);
+
+  /* Text — paper white, two mutes */
+  --foreground: #ececf0;
+  --muted: #8f8f98;
+  --faint: #55555e;
+
+  /* Hairlines — barely there */
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.2);
+
+  /* Single quiet accent — warm sand */
+  --accent: #e3b76b;
+  --accent-foreground: #0c0c0f;
+  --accent-dim: rgba(227, 183, 107, 0.12);
+
+  /* State */
+  --destructive: #d96b6b;
+  --success: #8fc99a;
+
+  /* Shadcn aliases */
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-foreground);
+  --secondary: var(--surface);
+  --secondary-foreground: var(--foreground);
+  --ring: rgba(255, 255, 255, 0.5);
+
+  --radius: 0px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-dim: var(--accent-dim);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-ring: var(--ring);
+
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-tick: tick 0.5s steps(1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes tick {
+    from {
+      opacity: 0.3;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--accent-dim);
+    color: var(--foreground);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Split-flap flip clock                                              */
+/* ------------------------------------------------------------------ */
+
+.flip-clock-visual {
+  font-size: min(18vw, 28vh);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flip-pair {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.flip-card {
+  --flip-dur: 500ms;
+  position: relative;
+  width: 0.66em;
+  height: 1.12em;
+  perspective: 700px;
+  font-variant-numeric: tabular-nums;
+}
+
+.flip-half,
+.flip-flap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  overflow: hidden;
+  background: var(--surface);
+  backface-visibility: hidden;
+}
+
+.flip-half--top,
+.flip-flap--top {
+  top: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+}
+
+.flip-half--bottom,
+.flip-flap--bottom {
+  bottom: 0;
+}
+
+.flip-flap--bottom {
+  border-top: 1px solid rgba(0, 0, 0, 0.45);
+}
+
+/* The glyph always spans the full card; each half clips its portion. */
+.flip-half > span,
+.flip-flap > span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 200%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 300;
+  color: var(--foreground);
+}
+
+.flip-half--top > span,
+.flip-flap--top > span {
+  top: 0;
+}
+
+.flip-half--bottom > span,
+.flip-flap--bottom > span {
+  bottom: 0;
+}
+
+.flip-flap--top {
+  z-index: 3;
+  transform-origin: center bottom;
+  animation: flip-top calc(var(--flip-dur) / 2) ease-in forwards;
+}
+
+.flip-flap--bottom {
+  z-index: 3;
+  transform-origin: center top;
+  animation: flip-bottom calc(var(--flip-dur) / 2) ease-out calc(var(--flip-dur) / 2) both;
+}
+
+@keyframes flip-top {
+  from {
+    transform: rotateX(0deg);
+  }
+  to {
+    transform: rotateX(-90deg);
+  }
+}
+
+@keyframes flip-bottom {
+  from {
+    transform: rotateX(90deg);
+  }
+  to {
+    transform: rotateX(0deg);
+  }
+}
+
+.flip-colon {
+  height: 1.12em;
+  margin: 0 0.13em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2em;
+}
+
+.flip-colon i {
+  width: 0.07em;
+  height: 0.07em;
+  background: var(--faint);
+}
+
+/* Native color inputs — quiet */
+input[type='color'] {
+  padding: 2px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type='color']::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type='color']::-webkit-color-swatch {
+  border: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

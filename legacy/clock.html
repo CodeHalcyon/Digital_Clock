@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock (Early Access)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2>Digital Clock</h2>
+    <div id="container" class="container">
+        <div id="hours">hours</div> :
+        <div id="minutes">minutes</div> :
+        <div id="seconds">seconds</div>
+    </div>
+    <div class="setbg">
+        <label for="input">Select Background Colour here<input onchange="getColor()" title="Select colour here"
+                type="color" name="color" id="color"></label>
+        <label for="input">Select Foreground Colour here<input onchange="getForeColor()" title="Select colour here"
+                type="color" name="forecolor" id="forecolor"></label>
+        <label for="input">Select Text Colour here<input onchange="getTextColor()" title="Select colour here"
+                type="color" name="textcolor" id="textcolor"></label>
+
+    </div>
+
+    <div class="todo-container">
+        <div class="todo">
+            <h3>🎯To-do List</h3>
+            <div><button type="button" onclick="addListItem()" class="add-item" id="add-item" href="" onclick="addListItem()">+ Add
+                    task</button></div>
+            <div>
+                <ul id="list"></ul>
+            </div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>
